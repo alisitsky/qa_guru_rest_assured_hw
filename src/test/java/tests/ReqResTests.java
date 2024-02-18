@@ -1,109 +1,83 @@
 package tests;
 
 import io.restassured.http.ContentType;
+import models.CreateUserErrorResBodyModel;
 import models.CreateUserReqBodyModel;
 import models.CreateUserResBodyModel;
+import models.CreateUserWrongFormatReqBodyModel;
 import org.junit.jupiter.api.Test;
 import io.qameta.allure.restassured.AllureRestAssured;
 
-
 import static helpers.CustomAllureListener.withCustomTemplates;
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static specs.CreateUserSpec.createUserReqSpec;
+import static specs.CreateUserSpec.createUserResSpec;
 
 public class ReqResTests {
 
     @Test
     public void successUserCreationTest(){
-        CreateUserReqBodyModel CreateUserReqBM = new CreateUserReqBodyModel();
-        CreateUserReqBM.setName("morpheus");
-        CreateUserReqBM.setJob("leader");
+        CreateUserReqBodyModel createUserReqBM = new CreateUserReqBodyModel();
+        createUserReqBM.setName("morpheus");
+        createUserReqBM.setJob("leader");
 
-        CreateUserResBodyModel createUserResBM = given()
-                .filter(withCustomTemplates())
-                .body(CreateUserReqBM)
-                .contentType(ContentType.JSON)
-                .log().uri()
-                .log().headers()
-                .log().body()
-        .when()
-                .post("https://reqres.in/api/users")
-        .then()
-                .log().status()
-                .log().body()
-                .statusCode(201)
-                .extract().as(CreateUserResBodyModel.class);
+        CreateUserResBodyModel createUserResBM = step("Make request", ()->
+            given(createUserReqSpec)
+                .body(createUserReqBM)
+            .when()
+                .post()
+            .then()
+                .spec(createUserResSpec)
+                .extract().as(CreateUserResBodyModel.class));
 
-        assertEquals("morpheus", createUserResBM.getName());
-        assertEquals("leader", createUserResBM.getJob());
-        assertNotEquals("", createUserResBM.getId());
-        assertNotEquals("", createUserResBM.getCreatedAt());
+        step("Check response", ()-> {
+            assertEquals("morpheus", createUserResBM.getName());
+            assertEquals("leader", createUserResBM.getJob());
+            assertNotEquals("", createUserResBM.getId());
+            assertNotEquals("", createUserResBM.getCreatedAt());
+        });
+    }
+
+
+    @Test
+    public void successUserCreationWithoutJobTest(){
+        CreateUserReqBodyModel createUserReqBM = new CreateUserReqBodyModel();
+        createUserReqBM.setName("morpheus");
+
+        CreateUserResBodyModel createUserResBM = step("Make request", ()->
+            given(createUserReqSpec)
+                .body(createUserReqBM)
+            .when()
+                .post()
+            .then()
+                .extract().as(CreateUserResBodyModel.class));
+
+        step("Check response", ()-> {
+            assertEquals("morpheus", createUserResBM.getName());
+            assertNull(createUserResBM.getJob());
+        });
     }
 
     @Test
-    public void successUserCreationFAILEDTest(){
-        CreateUserReqBodyModel CreateUserReqBM = new CreateUserReqBodyModel();
-        CreateUserReqBM.setName("morpheus");
-        CreateUserReqBM.setJob("leader");
+    public void wrongBodyUserCreation400Test(){
+        CreateUserWrongFormatReqBodyModel createUserWrongFormatReqBM = new CreateUserWrongFormatReqBodyModel();
+        createUserWrongFormatReqBM.setBody("{blah blah blah}");
 
-        CreateUserResBodyModel createUserResBM = given()
-                .filter(withCustomTemplates())
-                .body(CreateUserReqBM)
-                .contentType(ContentType.JSON)
-                .log().uri()
-                .log().headers()
-                .log().body()
-                .when()
-                .post("https://reqres.in/api/users")
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(201)
-                .extract().as(CreateUserResBodyModel.class);
+        CreateUserErrorResBodyModel createUserErrorResBM = step("Make request", ()->
+        given()
+                .body(createUserWrongFormatReqBM)
+        .when()
+                .post()
+        .then()
+                .extract().as(CreateUserErrorResBodyModel.class));
 
-        assertEquals("morpheus1", createUserResBM.getName());
-        assertEquals("leader", createUserResBM.getJob());
-        assertNotEquals("", createUserResBM.getId());
-        assertNotEquals("", createUserResBM.getCreatedAt());
+
+        //                .body(containsString("Bad Request"));
     }
-//
-//    @Test
-//    public void successUserCreationWithoutJobTest(){
-//        String createData = "{ \"name\": \"morpheus\"}";
-//
-//        given()
-//                .body(createData)
-//                .contentType(ContentType.JSON)
-//                .log().uri()
-//        .when()
-//                .post("https://reqres.in/api/users")
-//        .then()
-//                .log().status()
-//                .log().body()
-//                .statusCode(201)
-//                .body("name", is("morpheus"))
-//                .body("job", is(nullValue()));
-//    }
-//
-//    @Test
-//    public void wrongBodyUserCreation400Test(){
-//        String createData = "{ blah blah blah }";
-//
-//        given()
-//                .body(createData)
-//                .contentType(ContentType.JSON)
-//                .log().uri()
-//        .when()
-//                .post("https://reqres.in/api/users")
-//        .then()
-//                .log().status()
-//                .log().body()
-//                .statusCode(400)
-//                .body(containsString("Bad Request"));
-//    }
-//
+
 //    @Test
 //    public void noBodyUserCreation415Test(){
 //        given()
