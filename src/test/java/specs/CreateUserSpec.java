@@ -21,15 +21,41 @@ public class CreateUserSpec {
             .log().headers()
             .log().body();
 
-    public static ResponseSpecification createUserResSpec = new ResponseSpecBuilder()
+    public static ResponseSpecification createUser201ResSpec = new ResponseSpecBuilder()
             .expectStatusCode(201)
             .log(STATUS)
             .log(BODY)
             .build();
 
-    public static ResponseSpecification createUser404ResSpec = new ResponseSpecBuilder()
+    public static RequestSpecification unsuccessfulRegisterReqSpec = with()
+            .filter(withCustomTemplates())
+            .baseUri("https://reqres.in")
+            .basePath("/api/register")
+            .contentType(ContentType.JSON)
+            .log().uri()
+            .log().headers()
+            .log().body();
+
+    public static ResponseSpecification unsuccessfulRegister400ResSpec = new ResponseSpecBuilder()
             .expectStatusCode(400)
             .log(STATUS)
             .log(BODY)
             .build();
+
+    public static RequestSpecification updateUserReqSpec = with()
+            .filter(withCustomTemplates())
+            .baseUri("https://reqres.in")
+            .basePath("/api/user/2")
+            .contentType(ContentType.JSON)
+            .log().uri()
+            .log().headers()
+            .log().body();
+
+    public static ResponseSpecification updateUser200ResSpec = new ResponseSpecBuilder()
+            .expectStatusCode(200)
+            .log(STATUS)
+            .log(BODY)
+            .build();
 }
+
+

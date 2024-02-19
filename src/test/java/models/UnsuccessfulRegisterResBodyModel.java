@@ -3,6 +3,6 @@ package models;
 import lombok.Data;
 
 @Data
-public class CreateUserErrorResBodyModel {
+public class UnsuccessfulRegisterResBodyModel {
     String error;
 }
