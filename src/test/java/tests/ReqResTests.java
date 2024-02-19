@@ -7,11 +7,17 @@ import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 import static specs.CreateUserSpec.*;
+import static specs.DeleteUserSpec.deleteUser200ResSpec;
+import static specs.DeleteUserSpec.deleteUserReqSpec;
+import static specs.RegisterUserSpec.unsuccessfulRegister400ResSpec;
+import static specs.RegisterUserSpec.unsuccessfulRegisterReqSpec;
+import static specs.UpdateUserSpec.updateUser200ResSpec;
+import static specs.UpdateUserSpec.updateUserReqSpec;
 
 public class ReqResTests {
 
     @Test
-    public void successUserCreationTest() {
+    public void successfulUserCreationTest() {
         CreateUserReqBodyModel createUserReqBM = new CreateUserReqBodyModel();
         createUserReqBM.setName("morpheus");
         createUserReqBM.setJob("leader");
@@ -34,7 +40,7 @@ public class ReqResTests {
     }
 
     @Test
-    public void successUserCreationWithoutJobTest() {
+    public void successfulUserCreationWithoutJobTest() {
         CreateUserReqBodyModel createUserReqBM = new CreateUserReqBodyModel();
         createUserReqBM.setName("morpheus");
 
@@ -73,7 +79,7 @@ public class ReqResTests {
     }
 
     @Test
-    public void updateUserTest(){
+    public void successfulUserUpdateTest(){
         UpdateUserReqBodyModel updateUserReqBM = new UpdateUserReqBodyModel();
         updateUserReqBM.setName("morpheus");
         updateUserReqBM.setJob("zion resident");
@@ -95,18 +101,12 @@ public class ReqResTests {
         });
         }
 
-
-
-
-//    @Test
-//    public void successUserDeleteTest() {
-//        given()
-//                .log().uri()
-//        .when()
-//                .delete("https://reqres.in/api/user/2")
-//        .then()
-//                .log().status()
-//                .log().body()
-//                .statusCode(204);
-//    }
+    @Test
+    public void successfulUserDeleteTest() {
+        given(deleteUserReqSpec)
+        .when()
+                .delete()
+        .then()
+                .spec(deleteUser200ResSpec);
+    }
 }

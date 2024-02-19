@@ -10,19 +10,19 @@ import static io.restassured.RestAssured.with;
 import static io.restassured.filter.log.LogDetail.BODY;
 import static io.restassured.filter.log.LogDetail.STATUS;
 
-public class CreateUserSpec {
+public class UpdateUserSpec {
 
-    public static RequestSpecification createUserReqSpec = with()
+    public static RequestSpecification updateUserReqSpec = with()
             .filter(withCustomTemplates())
             .baseUri("https://reqres.in")
-            .basePath("/api/users")
+            .basePath("/api/user/2")
             .contentType(ContentType.JSON)
             .log().uri()
             .log().headers()
             .log().body();
 
-    public static ResponseSpecification createUser201ResSpec = new ResponseSpecBuilder()
-            .expectStatusCode(201)
+    public static ResponseSpecification updateUser200ResSpec = new ResponseSpecBuilder()
+            .expectStatusCode(200)
             .log(STATUS)
             .log(BODY)
             .build();
