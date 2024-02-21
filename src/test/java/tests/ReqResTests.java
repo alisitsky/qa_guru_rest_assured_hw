@@ -21,19 +21,19 @@ public class ReqResTests extends TestBase {
 
     @Test
     public void successfulUserCreationTest() {
-        CreateUserReqBodyModel createUserReqBM = new CreateUserReqBodyModel();
-        createUserReqBM.setName("morpheus");
-        createUserReqBM.setJob("leader");
+        CreateUserReqResBodyModel createUserReqResBM = new CreateUserReqResBodyModel();
+        createUserReqResBM.setName("morpheus");
+        createUserReqResBM.setJob("leader");
 
-        CreateUserResBodyModel createUserResBM = step("Make request", () ->
+        CreateUserReqResBodyModel createUserResBM = step("Make request", () ->
                 given(createUserReqSpec)
                         .basePath(basePath + usersPath)
-                        .body(createUserReqBM)
+                        .body(createUserReqResBM)
                 .when()
                         .post()
                 .then()
                         .spec(createUser201ResSpec)
-                        .extract().as(CreateUserResBodyModel.class));
+                        .extract().as(CreateUserReqResBodyModel.class));
 
         step("Check response", () -> {
             assertEquals("morpheus", createUserResBM.getName());
@@ -45,18 +45,18 @@ public class ReqResTests extends TestBase {
 
     @Test
     public void successfulUserCreationWithoutJobTest() {
-        CreateUserReqBodyModel createUserReqBM = new CreateUserReqBodyModel();
-        createUserReqBM.setName("morpheus");
+        CreateUserReqResBodyModel createUserReqResBM = new CreateUserReqResBodyModel();
+        createUserReqResBM.setName("morpheus");
 
-        CreateUserResBodyModel createUserResBM = step("Make request", () ->
+        CreateUserReqResBodyModel createUserResBM = step("Make request", () ->
                 given(createUserReqSpec)
                         .basePath(basePath + usersPath)
-                        .body(createUserReqBM)
+                        .body(createUserReqResBM)
                 .when()
                         .post()
                 .then()
                         .spec(createUser201ResSpec)
-                        .extract().as(CreateUserResBodyModel.class));
+                        .extract().as(CreateUserReqResBodyModel.class));
 
         step("Check response", () -> {
             assertEquals("morpheus", createUserResBM.getName());
@@ -66,39 +66,39 @@ public class ReqResTests extends TestBase {
 
     @Test
     public void unsuccessfulRegister400Test() {
-        UnsuccessfulRegisterReqBodyModel unsuccessfulRegisterReqBM = new UnsuccessfulRegisterReqBodyModel();
-        unsuccessfulRegisterReqBM.setEmail("sydney@fife");
+        UnsuccessfulRegisterReqResBodyModel unsuccessfulRegisterReqResBM = new UnsuccessfulRegisterReqResBodyModel();
+        unsuccessfulRegisterReqResBM.setEmail("sydney@fife");
 
-        UnsuccessfulRegisterResBodyModel unsuccessfulRegisterErrorResBM = step("Make request", () ->
+        UnsuccessfulRegisterReqResBodyModel unsuccessfulRegisterErrorReqResBM = step("Make request", () ->
                 given(unsuccessfulRegisterReqSpec)
                         .basePath(RestAssured.basePath + registerPath)
-                        .body(unsuccessfulRegisterReqBM)
+                        .body(unsuccessfulRegisterReqResBM)
                 .when()
                         .post()
                 .then()
                         .spec(unsuccessfulRegister400ResSpec)
-                        .extract().as(UnsuccessfulRegisterResBodyModel.class));
+                        .extract().as(UnsuccessfulRegisterReqResBodyModel.class));
 
         step("Check response", () -> {
-            assertEquals("Missing password", unsuccessfulRegisterErrorResBM.getError());
+            assertEquals("Missing password", unsuccessfulRegisterErrorReqResBM.getError());
         });
     }
 
     @Test
     public void successfulUserUpdateTest(){
-        UpdateUserReqBodyModel updateUserReqBM = new UpdateUserReqBodyModel();
-        updateUserReqBM.setName("morpheus");
-        updateUserReqBM.setJob("zion resident");
+        UpdateUserReqResBodyModel updateUserReqResBM = new UpdateUserReqResBodyModel();
+        updateUserReqResBM.setName("morpheus");
+        updateUserReqResBM.setJob("zion resident");
 
-        UpdateUserResBodyModel updateUserResBM =  step("Make request", () ->
+        UpdateUserReqResBodyModel updateUserResBM =  step("Make request", () ->
         given(updateUserReqSpec)
                 .basePath(RestAssured.basePath + userId2Path)
-                .body(updateUserReqBM)
+                .body(updateUserReqResBM)
         .when()
                 .put()
         .then()
                 .spec(updateUser200ResSpec)
-                .extract().as(UpdateUserResBodyModel.class));
+                .extract().as(UpdateUserReqResBodyModel.class));
 
         step("Check response", () -> {
             assertEquals("morpheus", updateUserResBM.getName());

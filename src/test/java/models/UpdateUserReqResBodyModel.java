@@ -3,6 +3,6 @@ package models;
 import lombok.Data;
 
 @Data
-public class UpdateUserResBodyModel {
+public class UpdateUserReqResBodyModel {
     String name, job, id, updatedAt;
 }
