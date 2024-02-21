@@ -14,8 +14,6 @@ public class UpdateUserSpec {
 
     public static RequestSpecification updateUserReqSpec = with()
             .filter(withCustomTemplates())
-            .baseUri("https://reqres.in")
-            .basePath("/api/user/2")
             .contentType(ContentType.JSON)
             .log().uri()
             .log().headers()

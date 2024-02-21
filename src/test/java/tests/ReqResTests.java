@@ -1,9 +1,11 @@
 package tests;
 
+import io.restassured.RestAssured;
 import models.*;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
+import static io.restassured.RestAssured.basePath;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 import static specs.CreateUserSpec.*;
@@ -14,7 +16,7 @@ import static specs.RegisterUserSpec.unsuccessfulRegisterReqSpec;
 import static specs.UpdateUserSpec.updateUser200ResSpec;
 import static specs.UpdateUserSpec.updateUserReqSpec;
 
-public class ReqResTests {
+public class ReqResTests extends TestBase {
 
     @Test
     public void successfulUserCreationTest() {
@@ -24,6 +26,7 @@ public class ReqResTests {
 
         CreateUserResBodyModel createUserResBM = step("Make request", () ->
                 given(createUserReqSpec)
+                        .basePath(basePath + "/users")
                         .body(createUserReqBM)
                 .when()
                         .post()
@@ -46,6 +49,7 @@ public class ReqResTests {
 
         CreateUserResBodyModel createUserResBM = step("Make request", () ->
                 given(createUserReqSpec)
+                        .basePath(basePath + "/users")
                         .body(createUserReqBM)
                 .when()
                         .post()
@@ -66,6 +70,7 @@ public class ReqResTests {
 
         UnsuccessfulRegisterResBodyModel unsuccessfulRegisterErrorResBM = step("Make request", () ->
                 given(unsuccessfulRegisterReqSpec)
+                        .basePath(RestAssured.basePath + "/register")
                         .body(unsuccessfulRegisterReqBM)
                 .when()
                         .post()
@@ -86,6 +91,7 @@ public class ReqResTests {
 
         UpdateUserResBodyModel updateUserResBM =  step("Make request", () ->
         given(updateUserReqSpec)
+                .basePath(RestAssured.basePath + "/user/2")
                 .body(updateUserReqBM)
         .when()
                 .put()
@@ -104,6 +110,7 @@ public class ReqResTests {
     @Test
     public void successfulUserDeleteTest() {
         given(deleteUserReqSpec)
+                .basePath(RestAssured.basePath + "/user/2")
         .when()
                 .delete()
         .then()

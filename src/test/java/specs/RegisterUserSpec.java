@@ -14,8 +14,6 @@ public class RegisterUserSpec {
 
     public static RequestSpecification unsuccessfulRegisterReqSpec = with()
             .filter(withCustomTemplates())
-            .baseUri("https://reqres.in")
-            .basePath("/api/register")
             .contentType(ContentType.JSON)
             .log().uri()
             .log().headers()
