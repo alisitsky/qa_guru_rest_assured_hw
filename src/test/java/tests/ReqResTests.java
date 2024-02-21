@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import models.*;
 import org.junit.jupiter.api.Test;
 
+import static data.ReqResData.*;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.basePath;
 import static io.restassured.RestAssured.given;
@@ -26,7 +27,7 @@ public class ReqResTests extends TestBase {
 
         CreateUserResBodyModel createUserResBM = step("Make request", () ->
                 given(createUserReqSpec)
-                        .basePath(basePath + "/users")
+                        .basePath(basePath + usersPath)
                         .body(createUserReqBM)
                 .when()
                         .post()
@@ -49,7 +50,7 @@ public class ReqResTests extends TestBase {
 
         CreateUserResBodyModel createUserResBM = step("Make request", () ->
                 given(createUserReqSpec)
-                        .basePath(basePath + "/users")
+                        .basePath(basePath + usersPath)
                         .body(createUserReqBM)
                 .when()
                         .post()
@@ -70,7 +71,7 @@ public class ReqResTests extends TestBase {
 
         UnsuccessfulRegisterResBodyModel unsuccessfulRegisterErrorResBM = step("Make request", () ->
                 given(unsuccessfulRegisterReqSpec)
-                        .basePath(RestAssured.basePath + "/register")
+                        .basePath(RestAssured.basePath + registerPath)
                         .body(unsuccessfulRegisterReqBM)
                 .when()
                         .post()
@@ -91,7 +92,7 @@ public class ReqResTests extends TestBase {
 
         UpdateUserResBodyModel updateUserResBM =  step("Make request", () ->
         given(updateUserReqSpec)
-                .basePath(RestAssured.basePath + "/user/2")
+                .basePath(RestAssured.basePath + userId2Path)
                 .body(updateUserReqBM)
         .when()
                 .put()
@@ -110,7 +111,7 @@ public class ReqResTests extends TestBase {
     @Test
     public void successfulUserDeleteTest() {
         given(deleteUserReqSpec)
-                .basePath(RestAssured.basePath + "/user/2")
+                .basePath(RestAssured.basePath + userId2Path)
         .when()
                 .delete()
         .then()
