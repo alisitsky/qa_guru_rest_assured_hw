@@ -14,9 +14,6 @@ public class DeleteUserSpec {
 
     public static RequestSpecification deleteUserReqSpec = with()
             .filter(withCustomTemplates())
-            .baseUri("https://reqres.in")
-            .basePath("/api/user/2")
-            .contentType(ContentType.JSON)
             .log().uri()
             .log().headers()
             .log().body();
